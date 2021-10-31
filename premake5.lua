@@ -1,7 +1,6 @@
 project "ImGui"
     kind "StaticLib"
     language "C++"  
-    staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -20,17 +19,27 @@ project "ImGui"
         "imstb_textedit.h",
         "imstb_truetype.h"
     }
-    defines
-        {
-            "IMGUI_API=__declspec( dllexport )"
-        }
-	filter "system:windows"
-        systemversion "latest"
-        cppdialect "C++17"
 
-    filter "configurations:Debug"
-	runtime "Debug"
-	symbols "on"
+    filter "system:windows"
+		systemversion "latest"
+		cppdialect "C++17"
+		staticruntime "On"
+
+	filter "system:linux"
+		pic "On"
+		systemversion "latest"
+		cppdialect "C++17"
+		staticruntime "On"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+
+	
 
     --filter { "system:windows", "configurations:Release" }
      --   buildoptions "/MT"
